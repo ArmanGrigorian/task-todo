@@ -5,37 +5,35 @@ export type TtaskList = {
 	status: string;
 };
 
-export function getTaskList(): TtaskList[] {
-	const activeData = localStorage.getItem("activeList");
-	const completedData = localStorage.getItem("completedList");
-	const deletedData = localStorage.getItem("deletedList");
+export function getTaskList(): [TtaskList[], TtaskList[], TtaskList[]] {
+	const activeData = localStorage.getItem("activeTasks");
+	const completedData = localStorage.getItem("completedTasks");
+	const deletedData = localStorage.getItem("deletedTasks");
 
-	let activeTasks: (TtaskList | undefined)[] = [];
-	let completedTasks: (TtaskList | undefined)[] = [];
-	let deletedTasks: (TtaskList | undefined)[] = [];
+	let activeTasks: TtaskList[] = [];
+	let completedTasks: TtaskList[] = [];
+	let deletedTasks: TtaskList[] = [];
 
 	if (activeData) {
 		activeTasks = JSON.parse(activeData);
+		localStorage.setItem("activeTasks", JSON.stringify(activeTasks));
 	} else {
-		activeTasks = [];
 		localStorage.setItem("activeTasks", JSON.stringify(activeTasks));
 	}
 
 	if (completedData) {
 		completedTasks = JSON.parse(completedData);
+		localStorage.setItem("completedTasks", JSON.stringify(completedTasks));
 	} else {
-		completedTasks = [];
 		localStorage.setItem("completedTasks", JSON.stringify(completedTasks));
 	}
 
 	if (deletedData) {
-		return (deletedTasks = JSON.parse(deletedData));
+		deletedTasks = JSON.parse(deletedData);
+		localStorage.setItem("deletedTasks", JSON.stringify(deletedTasks));
 	} else {
-		deletedTasks = [];
 		localStorage.setItem("deletedTasks", JSON.stringify(deletedTasks));
 	}
 
-	const result: (TtaskList | undefined)[][] = [activeTasks, completedTasks, deletedTasks];
-
-	return result;
+	return [activeTasks, completedTasks, deletedTasks];
 }

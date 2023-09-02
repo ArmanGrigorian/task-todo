@@ -1,37 +1,71 @@
 @use "../../modules/index.scss" as mxs;
 
 .newTask {
-   width: 30%;
-   margin: 10px auto;
+   width: 100%;
+   text-align: center;
+   margin-block: 10px;
+   position: relative;
 
-   fieldset {
-      @include mxs.colFlex(center, center, 10px);
+
+   dialog {
+      width: max(25%, 300px);
+      border: none;
+      background-color: transparent;
+      position: absolute;
+      inset: 0;
+      margin: auto;
       padding: 10px;
-      color: var(--my-color-black);
-      background-color: var(--my-color-white);
-      border: 1px solid var(--my-color-black);
-      
-      legend{
-         color: var(--my-color-green);
-         font-weight: 600;
+      text-align: end;
+
+      & > button{
+         position: relative;
+         top: 18px;
+         right: -8px;
+         width: 18px;
+         height: 18px;
+         line-height: 18px;
+         text-align: center;
+         
+
+         svg, path{
+            user-select: none;
+            pointer-events: none;
+         }
       }
 
-      input{
+      form {
          width: 100%;
-         padding: 3px 6px;
-      }
 
-      textarea{
-         width: 100%;
-         padding: 3px 6px;
-         min-height: 60px;
-         resize: none;
-         overflow-y: auto;
-      }
+         fieldset {
+            @include mxs.colFlex(center, center, 10px);
+            padding: 10px;
+            color: var(--my-color-black);
+            background-color: var(--my-color-white);
+            border: 1px solid var(--my-color-black);
 
-      div{
-         width: 100%;
-         @include mxs.rowFlex(center, center, 5%);
+            legend {
+               color: var(--my-color-green);
+               font-weight: 600;
+            }
+
+            input {
+               width: 100%;
+               padding: 3px 6px;
+            }
+
+            textarea {
+               width: 100%;
+               padding: 3px 6px;
+               min-height: 60px;
+               resize: none;
+               overflow-y: auto;
+            }
+
+            div {
+               width: 100%;
+               @include mxs.rowFlex(center, center, 5%);
+            }
+         }
       }
    }
 }

@@ -7,16 +7,17 @@ import { idGenerator } from "./utils/idGenerator.ts";
 import { getTaskList, TtaskList } from "./utils/getTaskList.ts";
 
 const App: FC = (): ReactElement => {
-	const nextId = idGenerator();
-	const tasksList = getTaskList();
+	const taskLists: [TtaskList[], TtaskList[], TtaskList[]] = getTaskList();
+	const activeList: TtaskList[] = taskLists[0];
+	const completedList: TtaskList[] = taskLists[1];
+	const deletedList: TtaskList[] = taskLists[2];
 
-	const [active, setActive] = useState<(TtaskList | undefined)[]>(tasksList[0]);
-	const [completed, setCompleted] = useState<(TtaskList | undefined)[]>(tasksList[1]);
-	const [deleted, setDeleted] = useState<(TtaskList | undefined)[]>(tasksList[2]);
+	const [active, setActive] = useState<TtaskList[]>(activeList);
+	const [completed, setCompleted] = useState<TtaskList[]>(completedList);
+	const [deleted, setDeleted] = useState<TtaskList[]>(deletedList);
+	const nextId = idGenerator();
 
 	function handleSubmit(e: FormEvent<HTMLFormElement>): void {
-		e.preventDefault();
-
 		const form: HTMLFormElement = e.currentTarget as HTMLFormElement;
 
 		const newTask: TtaskList = {
@@ -26,14 +27,17 @@ const App: FC = (): ReactElement => {
 			status: "active",
 		};
 
-		const activeData = localStorage.getItem("activeList");
-		if (activeData) {
-			const oldTasks: (TtaskList | undefined)[] = JSON.parse(activeData);
-			const newTasks: (TtaskList | undefined)[] = [...oldTasks, newTask];
-			localStorage.setItem("activeList", JSON.stringify(newTasks));
-		} else localStorage.setItem("activeList", JSON.stringify([newTask]));
+		setActive((prevActive) => {
+			if (prevActive) {
+				localStorage.setItem("activeTasks", JSON.stringify([newTask, ...prevActive]));
+				return [newTask, ...prevActive];
+			} else {
+				localStorage.setItem("activeTasks", JSON.stringify([newTask]));
+				return [newTask] as TtaskList[];
+			}
+		});
 
-		setActive((prevActive) => [newTask, ...prevActive]);
+		form.reset();
 	}
 
 	function handleClick(e: MouseEvent<HTMLDivElement | HTMLButtonElement>) {
@@ -46,16 +50,21 @@ const App: FC = (): ReactElement => {
 
 				setCompleted((prevCompleted) => {
 					const newTask = active?.find((task) => task?.id === div.id);
-					if (newTask) {
-						newTask.status = "completeAction";
-					}
 
-					if (prevCompleted) return [newTask, ...prevCompleted];
+					if (newTask) newTask.status = "completeAction";
+
+					const newCompleted = [newTask, ...prevCompleted].filter(
+						(val) => val !== undefined,
+					) as TtaskList[];
+					localStorage.setItem("completedTasks", JSON.stringify(newCompleted));
+
+					return newCompleted as TtaskList[];
 				});
+
 				setActive((prevActive) => {
-					if (prevActive) {
-						return prevActive.filter((task) => task?.id !== div.id);
-					}
+					const newActives = prevActive.filter((task) => task?.id !== div.id);
+					localStorage.setItem("activeTasks", JSON.stringify(newActives));
+					return newActives as TtaskList[];
 				});
 				break;
 
@@ -73,11 +82,21 @@ const App: FC = (): ReactElement => {
 						newTask.status = "deleteActionB";
 					}
 
-					return [newTask, ...prevCompleted];
+					const newDeleted = [newTask, ...prevCompleted];
+					localStorage.setItem("deletedTasks", JSON.stringify(newDeleted));
+					return newDeleted as TtaskList[];
 				});
 
-				setActive((prevState) => prevState?.filter((task) => task?.id !== div.id));
-				setCompleted((prevState) => prevState?.filter((task) => task?.id !== div.id));
+				setActive((prevState) => {
+					const newActives = prevState?.filter((task) => task?.id !== div.id);
+					localStorage.setItem("activeTasks", JSON.stringify(newActives));
+					return newActives as TtaskList[];
+				});
+				setCompleted((prevState) => {
+					const newCompleted = prevState?.filter((task) => task?.id !== div.id);
+					localStorage.setItem("completedTasks", JSON.stringify(newCompleted));
+					return newCompleted as TtaskList[];
+				});
 
 				break;
 			default:
