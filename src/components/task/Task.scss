@@ -1,0 +1,91 @@
+@use "../../modules/index.scss" as mxs;
+
+.active,
+.completed,
+.deleted,
+.completeAction,
+.deleteActionA,
+.deleteActionB {
+   @include mxs.colFlex(start, start, 5px);
+   width: 100%;
+   color: var(--my-color-black);
+   border: 1px solid var(--my-color-black);
+   padding: var(--my-value-mid);
+
+   div {
+      @include mxs.rowFlex(end, center, 3%);
+      width: 100%;
+
+      button {
+         @include mxs.rowFlex(center, center);
+         font-size: calc(var(--my-value-min) * 6);
+         padding: var(--my-value-min);
+         background-color: var(--my-color-white);
+         border: 1px solid var(--my-color-black);
+
+         svg,
+         path {
+            user-select: none;
+            pointer-events: none;
+         }
+      }
+   }
+}
+
+.active,
+.completed,
+.deleted {
+   transition: transform 1000ms linear;
+   background-color: var(--my-color-white);
+}
+
+.completeAction {
+   color: var(--my-color-white);
+   background-color: var(--my-color-green);
+   border: 1px dashed var(--my-color-white);
+}
+
+.deleteActionA,
+.deleteActionB {
+   color: var(--my-color-white);
+   background-color: var(--my-color-red);
+   border: 1px dashed var(--my-color-white);
+}
+
+.action {
+   transition: transform 1000ms linear;
+   transform: translateX(100px);
+}
+
+
+.completeAction {
+   animation: animationA 1000ms linear 1;
+}
+
+.deleteActionA {
+   animation: animationB 1000ms linear 1;
+}
+
+.deleteActionB {
+   animation: animationA 1000ms linear 1;
+}
+
+@keyframes animationA {
+   0% {
+      transform: translateX(-100%);
+   }
+
+   100% {
+      transform: translateX(0px);
+   }
+}
+
+@keyframes animationB {
+   0% {
+      transform: translateX(-200%);
+   }
+
+   100% {
+      transform: translateX(0px);
+   }
+}

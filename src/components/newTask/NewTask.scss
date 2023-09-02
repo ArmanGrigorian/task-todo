@@ -1,0 +1,37 @@
+@use "../../modules/index.scss" as mxs;
+
+.newTask {
+   width: 30%;
+   margin: 10px auto;
+
+   fieldset {
+      @include mxs.colFlex(center, center, 10px);
+      padding: 10px;
+      color: var(--my-color-black);
+      background-color: var(--my-color-white);
+      border: 1px solid var(--my-color-black);
+      
+      legend{
+         color: var(--my-color-green);
+         font-weight: 600;
+      }
+
+      input{
+         width: 100%;
+         padding: 3px 6px;
+      }
+
+      textarea{
+         width: 100%;
+         padding: 3px 6px;
+         min-height: 60px;
+         resize: none;
+         overflow-y: auto;
+      }
+
+      div{
+         width: 100%;
+         @include mxs.rowFlex(center, center, 5%);
+      }
+   }
+}

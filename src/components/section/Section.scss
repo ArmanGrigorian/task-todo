@@ -1,0 +1,18 @@
+@use "../../modules/index.scss" as mxs;
+
+.activeSec,
+.completedSec,
+.deletedSec {
+   @include mxs.colFlex(center, start, 10px);
+   width: 30%;
+   border: 1px solid var(--my-color-black);
+   padding: var(--my-value-mid);
+
+   h3 {
+      width: 100%;
+      color: var(--my-color-green);
+      text-align: center;
+      text-decoration: underline solid 1px var(--my-color-black);
+      text-underline-offset: var(--my-value-min);
+   }
+}

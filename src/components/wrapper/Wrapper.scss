@@ -1,0 +1,5 @@
+@use "../../modules/index.scss" as mxs;
+
+.wrapper {
+   @include mxs.rowFlex(center, start, 10px);
+}
